@@ -4,6 +4,8 @@ from .serializers import RegisterSerializer
 from django.contrib.auth import get_user_model
 from .models import Project, Task
 from .serializers import ProjectSerializer, TaskSerializer
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 
@@ -30,15 +32,25 @@ class ProjectViewSet(viewsets.ModelViewSet):
         serializer.save(owner=self.request.user)
 
 class TaskViewSet(viewsets.ModelViewSet):
-    
+    queryset = Task.objects.all() 
     serializer_class = TaskSerializer
 
     def get_queryset(self):
         user = self.request.user
-        if user.role == 'admin':
-            return Task.objects.filter(is_deleted=False)
-        return Task.objects.filter(assigned_to=user, is_deleted=False)
+        queryset = Task.objects.filter(is_deleted=False)
 
+        if user.role != 'admin':
+            queryset = queryset.filter(assigned_to=user)
+
+        status_param = self.request.query_params.get('status')
+        if status_param:
+            queryset = queryset.filter(status=status_param)
+
+        due_param = self.request.query_params.get('due_date')
+        if due_param:
+            queryset = queryset.filter(due_date=due_param)
+
+        return queryset
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
             return [IsAdmin()]
@@ -47,3 +59,9 @@ class TaskViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance):
         instance.is_deleted = True
         instance.save()
+
+    def destroy(self, request, *args, **kwargs):
+        task = self.get_object()
+        task.is_deleted = True
+        task.save()
+        return Response({'detail': 'Task soft-deleted.'}, status=status.HTTP_204_NO_CONTENT)
