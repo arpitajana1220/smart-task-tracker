@@ -2,8 +2,9 @@ from django.shortcuts import render
 from rest_framework import generics,viewsets, permissions
 from .serializers import RegisterSerializer
 from django.contrib.auth import get_user_model
-from .models import Project, Task
-from .serializers import ProjectSerializer, TaskSerializer
+from .models import Project, Task, ActivityLog
+from rest_framework.permissions import IsAuthenticated
+from .serializers import ProjectSerializer, TaskSerializer, ActivityLogSerializer
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -34,6 +35,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all() 
     serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -65,3 +67,31 @@ class TaskViewSet(viewsets.ModelViewSet):
         task.is_deleted = True
         task.save()
         return Response({'detail': 'Task soft-deleted.'}, status=status.HTTP_204_NO_CONTENT)
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        # Save previous values
+        prev_assignee = instance.assigned_to
+        prev_status = instance.status
+        prev_due_date = instance.due_date
+
+        # Perform the update
+        response = super().update(request, *args, **kwargs)
+
+        # After update, log the previous state
+        ActivityLog.objects.update_or_create(
+            task=instance,
+            defaults={
+                'previous_assignee': prev_assignee,
+                'previous_status': prev_status,
+                'previous_due_date': prev_due_date
+            }
+        )
+
+        return response
+
+class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = ActivityLog.objects.all()
+    serializer_class = ActivityLogSerializer
+    permission_classes = [IsAuthenticated]

@@ -1,11 +1,13 @@
 from django.urls import path, include
-from .views import RegisterView, ProjectViewSet, TaskViewSet
+from .views import RegisterView, ProjectViewSet, TaskViewSet, ActivityLogViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 
 router = DefaultRouter()
 router.register('projects', ProjectViewSet)
 router.register('tasks', TaskViewSet)
+router.register('activity-logs', ActivityLogViewSet, basename='activitylog')
 
 
 urlpatterns = [
