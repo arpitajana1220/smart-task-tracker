@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 import useRole from '../hooks/useRole';
 
 export default function CreateProject() {
@@ -17,8 +17,8 @@ export default function CreateProject() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        'http://localhost:8000/api/projects/',
+      await axiosInstance.post(
+        '/projects/',
         { title, description },
         {
           headers: {

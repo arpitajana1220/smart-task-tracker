@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 import useRole from '../hooks/useRole';
 
 export default function Dashboard() {
@@ -18,7 +18,7 @@ export default function Dashboard() {
         const url = statusFilter
           ? `http://localhost:8000/api/tasks/?status=${statusFilter}`
           : 'http://localhost:8000/api/tasks/';
-        const res = await axios.get(url, {
+        const res = await axiosInstance.get(url, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -38,7 +38,7 @@ export default function Dashboard() {
     const fetchProjects = async () => {
       if (role !== 'admin') return;
       try {
-        const res = await axios.get('http://localhost:8000/api/projects/', {
+        const res = await axiosInstance.get('/projects/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -55,7 +55,7 @@ export default function Dashboard() {
   const handleDeleteProject = async (projectId) => {
     if (!window.confirm('Are you sure you want to delete this project?')) return;
     try {
-      await axios.delete(`http://localhost:8000/api/projects/${projectId}/`, {
+      await axiosInstance.delete(`/projects/${projectId}/`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

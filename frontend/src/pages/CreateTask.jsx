@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 import useRole from '../hooks/useRole';
 
 export default function CreateTask() {
@@ -27,7 +27,7 @@ export default function CreateTask() {
     // Fetch contributors
     const fetchContributors = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/users/?role=contributor', {
+        const res = await axiosInstance.get('/users/?role=contributor', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -42,7 +42,7 @@ export default function CreateTask() {
     // Fetch projects
     const fetchProjects = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/projects/', {
+        const res = await axiosInstance.get('/projects/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -64,7 +64,7 @@ export default function CreateTask() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8000/api/tasks/', form, {
+      await axiosInstance.post('/tasks/', form, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

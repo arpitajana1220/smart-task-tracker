@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 
 export default function Tasks() {
   const [tasks, setTasks] = useState([]);
@@ -11,7 +11,7 @@ export default function Tasks() {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/tasks/', {
+        const res = await axiosInstance.get('/tasks/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -29,8 +29,8 @@ export default function Tasks() {
   // Handle status update
   const updateStatus = async (taskId, newStatus) => {
     try {
-      await axios.patch(
-        `http://localhost:8000/api/tasks/${taskId}/`,
+      await axiosInstance.patch(
+        `/tasks/${taskId}/`,
         { status: newStatus },
         {
           headers: {

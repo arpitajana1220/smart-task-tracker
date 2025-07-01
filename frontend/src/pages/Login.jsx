@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
@@ -15,7 +15,7 @@ export default function Login() {
  const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const res = await axios.post('http://localhost:8000/api/token/', form);
+    const res = await axiosInstance.post('/token/', form);
     const access = res.data.access;
     const refresh = res.data.refresh;
 

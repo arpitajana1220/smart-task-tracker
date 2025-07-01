@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axiosInstance from '../api/axios';
 
 export default function ActivityLogs() {
   const [logs, setLogs] = useState([]);
@@ -10,7 +10,7 @@ export default function ActivityLogs() {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/logs/', {
+        const res = await axiosInstance.get('/logs/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
