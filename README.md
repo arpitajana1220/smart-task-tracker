@@ -1,6 +1,8 @@
 # 🧠 Smart Task Tracker
 
 A full-stack task and project management application built with **Django REST Framework (Backend)** and **ReactJS (Frontend)**. It features JWT-based authentication, role-based access control, activity logging, soft deletion, and dynamic task assignment.
+## 🚀 Live Demo
+- 🖥️ [Link](https://smart-task-tracker-frontend.onrender.com)
 
 ---
 
@@ -82,8 +84,6 @@ cd frontend
 npm install
 npm run dev
 ```
-## 🔑 Admin Credentials (For Testing)
-You can register as an Admin using the dropdown on the Register page.
 
 ## 📃 License
 This project is licensed under the MIT License.
