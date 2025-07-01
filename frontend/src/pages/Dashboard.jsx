@@ -16,8 +16,8 @@ export default function Dashboard() {
     const fetchTasks = async () => {
       try {
         const url = statusFilter
-          ? `http://localhost:8000/api/tasks/?status=${statusFilter}`
-          : 'http://localhost:8000/api/tasks/';
+          ? `/tasks/?status=${statusFilter}`
+          : '/tasks/';
         const res = await axiosInstance.get(url, {
           headers: {
             Authorization: `Bearer ${token}`,
