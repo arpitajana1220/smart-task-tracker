@@ -1,0 +1,4 @@
+// src/hooks/useRole.js
+export default function useRole() {
+  return localStorage.getItem('role');
+}
