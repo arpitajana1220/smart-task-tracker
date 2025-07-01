@@ -7,7 +7,7 @@ import CreateTask from './pages/CreateTask';
 import Tasks from './pages/Tasks';
 import CreateProject from './pages/CreateProject';
 import ActivityLogs from './pages/ActivityLogs';
-import ProtectedRoute from './components/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 import Navbar from './components/Navbar';
 import './index.css';
 
